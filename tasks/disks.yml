@@ -1,0 +1,21 @@
+#
+# Disks optimizations
+#
+
+- name: Change SSD scheduer to NOOP
+  shell: echo noop > /sys/block/{{ item }}/queue/scheduler
+  with_items:
+  - "{{ hostvars[ansible_hostname].ssds }}"
+  become: yes
+  become_method: sudo
+  tags:
+  - disks
+
+- name: Change HDD scheduer to CFQ
+  shell: echo cfq > /sys/block/{{ item }}/queue/scheduler
+  with_items:
+  - "{{ hostvars[ansible_hostname].hdds }}"
+  become: yes
+  become_method: sudo
+  tags:
+  - disks

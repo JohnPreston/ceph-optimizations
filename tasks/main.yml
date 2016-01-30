@@ -1,0 +1,13 @@
+#
+# CEPH optimization
+#
+
+- name: Network optimizations
+  include: network.yml
+
+- name: Disks optimizations
+  include: disks.yml
+
+- name: Memory
+  include: memory.yml
+

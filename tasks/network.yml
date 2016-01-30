@@ -1,0 +1,59 @@
+#
+#  Network optimizations
+#
+
+- name: High bandwidth links (10GbE) backlog
+  sysctl: name=net.core.netdev_max_backlog value=300000 state=present reload=yes
+  become: yes
+  become_method: sudo
+  tags:
+  - network
+
+- name: Buffer memory management WMEM
+  sysctl: name=net.ipv4.tcp_wmem value="2097152 2097152 20971520" state=present reload=yes
+  become: yes
+  become_method: sudo
+  tags:
+  - network
+
+- name: Buffer memory management RMEM
+  sysctl: name=net.ipv4.tcp_rmem value="2097152 2097152 20971520" state=present reload=yes
+  become: yes
+  become_method: sudo
+  tags:
+  - network
+
+- name: Max receive buffer size any connection type
+  sysctl: name=net.core.rmem_max value=20971520 state=present reload=yes
+  become: yes
+  become_method: sudo
+  tags:
+  - network
+
+- name: Max send buffer size size any connection type
+  sysctl: name=net.core.wmem_max value=20971520 state=present reload=yes
+  become: yes
+  become_method: sudo
+  tags:
+  - network
+
+- name: Disabling network auto-tuning
+  sysctl: name=net.ipv4.tcp_moderate_rcvbuf value=0 state=present reload=yes
+  become: yes
+  become_method: sudo
+  tags:
+  - network
+
+- name: For LAN - Disable TCP Timestamps
+  sysctl: name=net.ipv4.tcp_timestamps value=0 state=present reload=yes
+  become: yes
+  become_method: sudo
+  tags:
+  - network
+
+- name: Apply changes immediately
+  shell: sysctl -w net.ipv4.route.flush=1
+  become: yes
+  become_method: sudo
+  tags:
+  - network
